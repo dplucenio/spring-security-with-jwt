@@ -1,6 +1,9 @@
 package io.plucen.springsecuritywithjwt.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.plucen.springsecuritywithjwt.security.jwt.JwtCreationFilter;
 import io.plucen.springsecuritywithjwt.users.UserService;
+import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,6 +19,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
+  private final ObjectMapper objectMapper;
+  private final SecretKey jwtSecretKey;
 
   @Bean
   public DaoAuthenticationProvider daoAuthenticationProvider() {
@@ -32,6 +37,13 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
+    http.csrf()
+        .disable()
+        .addFilter(new JwtCreationFilter(authenticationManager(), jwtSecretKey, objectMapper))
+        .authorizeRequests()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .httpBasic();
   }
 }
