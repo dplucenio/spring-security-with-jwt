@@ -3,8 +3,6 @@ package io.plucen.springsecuritywithjwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.plucen.springsecuritywithjwt.users.UserService;
-import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +19,6 @@ import org.springframework.util.Base64Utils;
 class SpringSecurityWithJwtApplicationTests {
 
   @Autowired MockMvc mockMvc;
-  @Autowired UserService userService;
-  @Autowired DataSource dataSource;
 
   @Value("${admin.email}")
   private String adminEmail;
@@ -37,7 +33,6 @@ class SpringSecurityWithJwtApplicationTests {
 
   @Test
   void shouldAuthorizeWithBasicAuthentication() throws Exception {
-    System.out.println(userService.findAll());
     mockMvc
         .perform(
             get("/users")
