@@ -1,4 +1,4 @@
-# 🍃️:leaves: spring-security-with-jwt
+# :leaves: spring-security-with-jwt
 
 [![YourActionName Actions Status](https://github.com/dplucenio/spring-security-with-jwt/workflows/test/badge.svg)](https://github.com/dplucenio/spring-security-with-jwt/actions)
 
@@ -17,6 +17,3 @@ A demonstration on how to use [JWT](https://jwt.io) authentication with [Spring 
 - [ ] Implement simple front-end with [React](https://reactjs.org) that integrates with back-end to 
 demonstrate authentication and the business logic
   
-
-  
-
