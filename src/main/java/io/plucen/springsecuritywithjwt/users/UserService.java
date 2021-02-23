@@ -22,7 +22,8 @@ public class UserService implements UserDetailsService {
   }
 
   public User create(String email, String password) {
-    return userRepository.insert(new User(UUID.randomUUID(), email, password));
+    return userRepository.insert(
+        new User(UUID.randomUUID(), email, passwordEncoder.encode(password)));
   }
 
   public Optional<User> findByEmail(String email) {
