@@ -1,5 +1,6 @@
 package io.plucen.springsecuritywithjwt;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.Base64Utils;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,7 +33,7 @@ class SpringSecurityWithJwtApplicationTests {
 
   @Test
   void shouldNotAuthorizeUnauthenticatedAccess() throws Exception {
-    mockMvc.perform(get("/users")).andExpect(status().isUnauthorized());
+    mockMvc.perform(get("/users")).andExpect(status().isForbidden());
   }
 
   @Test
@@ -48,7 +47,10 @@ class SpringSecurityWithJwtApplicationTests {
                         new UserCreationDto(adminEmail, adminPassword))))
         .andExpect(status().isOk())
         .andExpect(header().exists("Authorization"));
+  }
 
+  @Test
+  public void shouldBeAbleToAccessProtectedEndpoint() throws Exception {
     final String token =
         mockMvc
             .perform(
@@ -61,19 +63,9 @@ class SpringSecurityWithJwtApplicationTests {
             .getResponse()
             .getHeader("Authorization")
             .replace("Bearer ", "");
-    System.out.println(token);
-  }
 
-  @Test
-  void shouldAuthorizeWithBasicAuthentication() throws Exception {
     mockMvc
-        .perform(
-            get("/users")
-                .header(
-                    HttpHeaders.AUTHORIZATION,
-                    "Basic "
-                        + Base64Utils.encodeToString(
-                            (adminEmail + ":" + adminPassword).getBytes())))
+        .perform(get("/users").header(AUTHORIZATION, "Bearer " + token))
         .andExpect(status().isOk());
   }
 }

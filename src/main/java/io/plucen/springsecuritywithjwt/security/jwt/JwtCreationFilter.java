@@ -26,7 +26,7 @@ public class JwtCreationFilter extends UsernamePasswordAuthenticationFilter {
       AuthenticationManager authenticationManager,
       SecretKey jwtSecretKey,
       ObjectMapper objectMapper) {
-    this.setAuthenticationManager(authenticationManager);
+    super(authenticationManager);
     this.objectMapper = objectMapper;
     this.jwtSecretKey = jwtSecretKey;
   }
