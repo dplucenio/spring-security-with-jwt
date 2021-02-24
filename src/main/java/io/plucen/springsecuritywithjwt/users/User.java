@@ -1,5 +1,6 @@
 package io.plucen.springsecuritywithjwt.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User {
   @Id private final UUID id;
   private final String email;
-  private final String password;
+  @JsonIgnore private final String password;
 
   public static class UserDetailsAdapter implements UserDetails {
     private final User user;

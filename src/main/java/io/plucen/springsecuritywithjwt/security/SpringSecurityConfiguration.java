@@ -44,7 +44,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .disable()
         .addFilter(new JwtCreationFilter(authenticationManager(), jwtSecretKey, objectMapper))
         .addFilterAfter(
-            new JwtAuthenticationFilter(authenticationManager(), jwtSecretKey),
+            new JwtAuthenticationFilter(authenticationManager(), jwtSecretKey, userService),
             JwtCreationFilter.class)
         .sessionManagement()
         .sessionCreationPolicy(STATELESS)
