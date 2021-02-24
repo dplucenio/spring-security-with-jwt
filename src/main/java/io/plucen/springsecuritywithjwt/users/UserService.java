@@ -21,6 +21,10 @@ public class UserService implements UserDetailsService {
     return userRepository.findAll();
   }
 
+  public Optional<User> findById(UUID id) {
+    return userRepository.findById(id);
+  }
+
   public User create(String email, String password) {
     return userRepository.insert(
         new User(UUID.randomUUID(), email, passwordEncoder.encode(password)));

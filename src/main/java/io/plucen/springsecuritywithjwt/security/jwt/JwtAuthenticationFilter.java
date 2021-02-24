@@ -2,6 +2,7 @@ package io.plucen.springsecuritywithjwt.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.plucen.springsecuritywithjwt.users.UserService;
 import java.io.IOException;
 import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
@@ -16,11 +17,15 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
   private final SecretKey jwtSecretKey;
+  private final UserService userService;
 
   public JwtAuthenticationFilter(
-      AuthenticationManager authenticationManager, SecretKey jwtSecretKey) {
+      AuthenticationManager authenticationManager,
+      SecretKey jwtSecretKey,
+      UserService userService) {
     super(authenticationManager);
     this.jwtSecretKey = jwtSecretKey;
+    this.userService = userService;
   }
 
   @Override
@@ -37,8 +42,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     final String token = authorizationHeader.replace("Bearer", "");
     final Claims body =
         Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(token).getBody();
-    SecurityContextHolder.getContext()
-        .setAuthentication(new UsernamePasswordAuthenticationToken(body.getSubject(), null, null));
+    final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+        new UsernamePasswordAuthenticationToken(body.getSubject(), null, null);
+    usernamePasswordAuthenticationToken.setDetails(
+        userService.findByEmail(body.getSubject()).orElseThrow());
+    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     chain.doFilter(request, response);
   }
 }
