@@ -1,6 +1,9 @@
 package io.plucen.springsecuritywithjwt.security;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.plucen.springsecuritywithjwt.security.jwt.JwtAuthenticationFilter;
 import io.plucen.springsecuritywithjwt.security.jwt.JwtCreationFilter;
 import io.plucen.springsecuritywithjwt.users.UserService;
 import javax.crypto.SecretKey;
@@ -40,10 +43,14 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.csrf()
         .disable()
         .addFilter(new JwtCreationFilter(authenticationManager(), jwtSecretKey, objectMapper))
+        .addFilterAfter(
+            new JwtAuthenticationFilter(authenticationManager(), jwtSecretKey),
+            JwtCreationFilter.class)
+        .sessionManagement()
+        .sessionCreationPolicy(STATELESS)
+        .and()
         .authorizeRequests()
         .anyRequest()
-        .authenticated()
-        .and()
-        .httpBasic();
+        .authenticated();
   }
 }
