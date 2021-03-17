@@ -12,7 +12,9 @@ export default function App() {
   function handleSubmit(e) {
     console.log(history);
     e.preventDefault();
-    // history.push("/users");
+    setTimeout(() => {
+      history.push("/users");
+    }, 2000);
   }
 
   return (

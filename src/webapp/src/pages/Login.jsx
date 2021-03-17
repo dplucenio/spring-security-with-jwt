@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -48,7 +48,18 @@ function Login(props) {
   let [status, setStatus] = useState(IDLE);
   let [username, setUsername] = useState('');
   let [password, setPassword] = useState('');
-  let {handleSubmit: doHandleSubmit} = props;
+  let [loginLabel, setLoginLabel] = useState('login');
+  let { handleSubmit: doHandleSubmit } = props;
+
+  useEffect(() => {
+    if (status === LOGGING_IN) {
+      let id = setInterval(() => {
+        setLoginLabel(loginLabel.slice(-3) === '...' ? 'login' : loginLabel + '.');
+      }, 400);
+      return () => { clearInterval(id); };
+    }
+
+  }, [status, loginLabel])
 
   let handleUsernameChange = e => {
     setUsername(e.target.value);
@@ -57,11 +68,11 @@ function Login(props) {
 
   let handlePassword = e => {
     setPassword(e.target.value);
-    console.log(password);
   }
 
   let handleSubmit = e => {
     setStatus(LOGGING_IN);
+    setLoginLabel('login.')
     doHandleSubmit(e);
   }
 
@@ -70,7 +81,7 @@ function Login(props) {
       <Form onSubmit={handleSubmit}>
         <input type="text" name="" id="" placeholder="username" value={username} onChange={handleUsernameChange} />
         <input type="password" name="" id="" placeholder="password" value={password} onChange={handlePassword} />
-        <input type="submit" value={status===IDLE ?"login":"loggingIn"}/>
+        <input type="submit" value={loginLabel} />
       </Form>
     </Container>
   );

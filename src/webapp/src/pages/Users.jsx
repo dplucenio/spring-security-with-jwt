@@ -25,9 +25,10 @@ export default function Users() {
   return (
     <OuterContainer>
       <InnerContainer>
-        <Card name="Daniel Plucenio" username = "dplucenio@gmail.com"/>
-        <Card name="Priscilla Bernardelli" username = "pbernardelli@gmail.com"/>
-        <Card name="Clarice Plucenio" username = "cplucenio@gmail.com"/>
+        <Card name="John Lennon" username = "jlennon@mail.com"/>
+        <Card name="Paul McCartney" username = "pmccartney@mail.com"/>
+        <Card name="George Harrison" username = "gharrison@mail.com"/>
+        <Card name="Ringo Star" username = "rstar@mail.com"/>
       </InnerContainer>
       <AddButton onClick={e => alert('hi')} />
     </OuterContainer>
