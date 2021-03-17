@@ -2,6 +2,9 @@
 
 [![YourActionName Actions Status](https://github.com/dplucenio/spring-security-with-jwt/workflows/test/badge.svg)](https://github.com/dplucenio/spring-security-with-jwt/actions)
 
+## What are we going to build?
+![aa](src/webapp/src/resources/demo.gif)
+
 A demonstration on how to use [JWT](https://jwt.io) authentication with [Spring Security](https://spring.io/projects/spring-security).
 
 ## TODO list
